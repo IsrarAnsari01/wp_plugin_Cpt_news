@@ -1,4 +1,4 @@
-## Custom News type plugin
+## Custom News type wordpress plugin
 ### Features
 * Add news
 * Add addition meta information
