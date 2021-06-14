@@ -1,4 +1,4 @@
-## B-Custom News type wordpress plugin
+## Intern-Custom News type wordpress plugin
 ### Features
 * Add news
 * Add addition meta information
