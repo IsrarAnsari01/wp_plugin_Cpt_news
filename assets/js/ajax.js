@@ -19,7 +19,6 @@ jQuery(document).ready(($) => {
       newsContent,
       action: "add_new_news",
     };
-    // console.log(data);
     jQuery.ajax({
       url: submit_News_obj.siteUrl,
       method: "POST",
@@ -29,9 +28,9 @@ jQuery(document).ready(($) => {
       encode: true,
       success: function (response) {
         if (response) {
-          alert("Successfully save new blog");
+          alert("Successfully save new News");
         } else {
-          alert("Error in saving new blogs");
+          alert("Error in saving new News");
         }
       },
       error: function (jqXHR, error, errorThrown) {

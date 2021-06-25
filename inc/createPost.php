@@ -26,7 +26,7 @@ function new_post_submit_cb()
     );
     ob_start();
     $post_id = wp_insert_post($post_arr);
-    echo $finalResult = wp_json_encode($$post_id);
+    echo $finalResult = wp_json_encode($post_id);
     return ob_get_clean();
     wp_die();
 }

@@ -8,10 +8,10 @@ function add_post_through_rest_api()
         <h2>Add New News</h2>
         <form method="post">
             <label for="#newsTitle"> Enter News Title Here </label>
-            <input type="text" id="newsTitle" placeholder="Enter News Title here">
+            <input type="text" name="newsTitle" id="newsTitle" placeholder="Enter News Title here" required>
             <br> <br>
             <label for="newsTypes">Chose Cetagory</label>
-            <select name="newsTypes" id="newsTypes">
+            <select name="newsTypes" name="newsType" id="newsTypes" required>
                 <?php
                 $args = array(
                     'public'   => true,
@@ -30,9 +30,11 @@ function add_post_through_rest_api()
                         foreach ($terms as $term) {
                             $taxonomyName = $term->name;
                             $term_id = $term->term_id;
+                            if ($taxonomyName && $term_id) {
                 ?>
-                            <option value="<?php echo  $term_id; ?>"><?php echo $taxonomyName; ?></option>
+                                <option value="<?php echo  $term_id; ?>"><?php echo $taxonomyName; ?></option>
                 <?php
+                            }
                         }
                     }
                 }
@@ -40,20 +42,20 @@ function add_post_through_rest_api()
                 ?>
             </select> <br> <br>
             <label for="reporterName"> Enter Reporter Name
-                <input type="text" id="reporterName" , placeholder="Reporter Name">
+                <input type="text" name="reporterName" id="reporterName" , placeholder="Reporter Name" required>
             </label> <br> <br>
             <label for="reporterCity"> Enter Reported City
-                <input type="text" id="reporterCity" , placeholder="Reported City">
+                <input type="text" name="reporterCity" id="reporterCity" , placeholder="Reported City" required>
             </label> <br> <br>
             <label for="reporterGender"> Enter Reporter Gender
-                <select name="gender" id="reporterGender">
+                <select name="gender" id="reporterGender" name="reporterGender"  required>
                     <option value="#" selected disabled> chose One </option>
                     <option value="male"> Male </option>
                     <option value="female"> Female </option>
                 </select>
             </label> <br> <br>
-            <input type='file' id="exampleFormControlFile1" name='NewPicture' label="Select Sutable Image for News" /> <br> <br>
-            <textarea name="newsContent" id="newsContent" cols="100" rows="10" placeholder="Enter News Details here"></textarea> <br> <br>
+            <input type='file' id="exampleFormControlFile1" name='NewPicture' label="Select Sutable Image for News" required /> <br> <br>
+            <textarea name="newsContent" id="newsContent" cols="100" rows="10" placeholder="Enter News Details here" required></textarea> <br> <br>
             <button type="submit">Submit News</button>
         </form>
     </div>

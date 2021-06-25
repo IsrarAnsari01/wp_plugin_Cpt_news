@@ -40,7 +40,6 @@ class REST_API
             'post_type' => 'news',
             'tax_input'    => array(
                 'hierarchical_tax'     => $newsType,
-                // 'non_hierarchical_tax' => $non_hierarchical_terms,
             ),
             'meta_input'   => array(
                 'advanced_options_reporter-name' => $reporterName,
