@@ -20,7 +20,7 @@ jQuery(document).ready(($) => {
       action: "add_new_news",
     };
     jQuery.ajax({
-      url: submit_News_obj.siteUrl,
+      url: submit_News_obj.siteUrl+"/add-new-news",
       method: "POST",
       data: data,
       caches: false,
