@@ -1,2 +1,9 @@
-"# wp_plugin_Cpt_news" 
-"# wp_plugin_Cpt_news" 
+## Intern-Custom News type wordpress plugin
+### Features
+* Add news
+* Add addition meta information
+* Frontend & backend pagination 
+* Custom api for CRUD operation in news
+* Add Taxonomy 
+### Note
+This is my first ever plugin. Bugs will resolve soon  
