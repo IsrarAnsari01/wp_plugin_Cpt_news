@@ -20,7 +20,7 @@ jQuery(document).ready(($) => {
       action: "add_new_news",
     };
     jQuery.ajax({
-      url: submit_News_obj.siteUrl,
+      url: submit_News_obj.siteUrl + "/wp-json/news/add-new-news",
       method: "POST",
       data: data,
       caches: false,
@@ -38,32 +38,34 @@ jQuery(document).ready(($) => {
       },
     });
   });
+
   // Delete News
-  let deleteParentDiv = $("#forDelete");
-  let formInsideDeleteDiv = deleteParentDiv.find("form");
-  formInsideDeleteDiv.submit((e) => {
+  $(".newsDeleteForm").on("submit", function (e) {
     e.preventDefault();
-    const postId = formInsideDeleteDiv.find("#submit").attr("postId");
-    let posted_id = { postId, action: "delete_news" };
-    jQuery.ajax({
-      url: submit_News_obj.siteUrl,
-      method: "POST",
-      data: posted_id,
-      caches: false,
-      dataType: "json",
-      encode: true,
-      success: function (response) {
-        if (response) {
+    let form = $(this);
+    if (confirm("Are you sure you want to delete this")) {
+      let postId = form.find("#newsDel").attr("postId");
+      let posted_id = { postId, action: "delete_news" };
+      console.log(posted_id);
+      jQuery.ajax({
+        url: submit_News_obj.siteUrl + "/wp-json/news/delete-news",
+        method: "POST",
+        data: posted_id,
+        caches: false,
+        dataType: "json",
+        encode: true,
+        success: function (response) {
+          let parentDiv = form.closest(".parentDiv");
+          parentDiv.remove();
           alert("Deleted Successfully");
-        } else {
-          alert("Error in deleting news");
-        }
-      },
-      error: function (jqXHR, error, errorThrown) {
-        console.log("Error in finding news");
-      },
-    });
+        },
+        error: function (jqXHR, error, errorThrown) {
+          console.log("Error in Deleting news");
+        },
+      });
+    }
   });
+
   // For Update
   let forUpdate = $("#forUpdate");
   let updateForm = forUpdate.find("form");

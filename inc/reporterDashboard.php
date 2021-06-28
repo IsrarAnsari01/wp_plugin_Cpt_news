@@ -4,6 +4,12 @@ class reporterDashboard
     public $currentRole;
     public $reporterName;
     public $reporterEmail;
+    /**
+     * Constructor that initailize some functions as well as register our shortcode
+     * @param NULL
+     * @return NULL
+     */
+
     function __construct()
     {
         add_action("init", [$this, "getReporterUser"]);
@@ -11,11 +17,24 @@ class reporterDashboard
         add_shortcode("Reporter_Dashboard", [$this, "reporterDashboad_cb"]);
     }
 
+    /**
+     * Get current user ID
+     * @param NULL
+     * @return NULL
+     */
+
     public function getReporterUser()
     {
 
         $this->currentRole = get_users(array('role__in' => array("reporter")));
     }
+
+
+    /**
+     * Grab reporter name and email and save them in variables
+     * @param NULL
+     * @return NULL
+     */
 
     public function displayReporterName()
     {
@@ -24,6 +43,13 @@ class reporterDashboard
             $this->reporterEmail = $reporter->user_email;
         }
     }
+
+    /**
+     * Display basic information on screen
+     * @param NULL
+     * @return NULL
+     */
+
     public function reporterDashboad_cb()
     {
         ob_start();

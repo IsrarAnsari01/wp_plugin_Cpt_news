@@ -97,3 +97,4 @@ require plugin_dir_path(__FILE__) . "inc/addPostThroughRestApi.php";
 require plugin_dir_path(__FILE__) . "inc/class_rest.php";
 require plugin_dir_path(__FILE__) . "inc/reporterRole.php";
 require plugin_dir_path(__FILE__) . "inc/reporterDashboard.php";
+require plugin_dir_path(__FILE__) . "inc/retriveReporterNews.php";

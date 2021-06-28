@@ -15,7 +15,7 @@ function new_post_submit_cb()
         'post_author'  => $user_id,
         'post_type' => 'news',
         'tax_input'    => array(
-            'hierarchical_tax'     => $newsType,
+            'newstype'     => $newsType,
             // 'non_hierarchical_tax' => $non_hierarchical_terms,
         ),
         'meta_input'   => array(
@@ -26,6 +26,7 @@ function new_post_submit_cb()
     );
     ob_start();
     $post_id = wp_insert_post($post_arr);
+    wp_set_object_terms($post_id, (int)$newsType, "newstype");
     echo $finalResult = wp_json_encode($post_id);
     return ob_get_clean();
     wp_die();

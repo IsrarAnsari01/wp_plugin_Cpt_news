@@ -1,8 +1,11 @@
 <?php
 class REST_API
 {
+    public $user_id;
     function __construct()
     {
+        add_action('init', [$this, "getLoggedInUser"]);
+
         add_action('rest_api_init', function () {
             register_rest_route('news', '/add-new-news', array(
                 'methods' => 'POST',
@@ -22,16 +25,21 @@ class REST_API
             ));
         });
     }
+
+    function getLoggedInUser()
+    {
+        $this->user_id = get_current_user_id();
+    }
+
     function add_new_news(WP_REST_Request $request)
     {
-        print_r($param = $request->get_param('data'));
-        $newsTitle = $_POST['newsTitle'];
-        $newsType = $_POST['newsType'];
-        $reporterName = $_POST['reporterName'];
-        $reporterCity = $_POST['reporterCity'];
-        $reporterGender = $_POST['reporterGender'];
-        $newsContent = $_POST['newsContent'];
-        $user_id =  get_current_user_id();
+        $newsTitle = sanitize_text_field($_POST['newsTitle']);
+        $newsType = sanitize_text_field($_POST['newsType']);
+        $reporterName = sanitize_text_field($_POST['reporterName']);
+        $reporterCity = sanitize_text_field($_POST['reporterCity']);
+        $reporterGender = sanitize_text_field($_POST['reporterGender']);
+        $newsContent = sanitize_text_field($_POST['newsContent']);
+        $user_id =  $this->user_id;
         $post_arr = array(
             'post_title'   => $newsTitle,
             'post_content' => $newsContent,
@@ -39,7 +47,7 @@ class REST_API
             'post_author'  => $user_id,
             'post_type' => 'news',
             'tax_input'    => array(
-                'hierarchical_tax'     => $newsType,
+                'newstype'     => $newsType,
             ),
             'meta_input'   => array(
                 'advanced_options_reporter-name' => $reporterName,
@@ -49,13 +57,14 @@ class REST_API
         );
         ob_start();
         $post_id = wp_insert_post($post_arr);
-        echo $finalResult = wp_json_encode($$post_id);
+        wp_set_object_terms($post_id, (int)$newsType, "newstype");
+        echo $finalResult = wp_json_encode($post_id);
         return ob_get_clean();
         wp_die();
     }
+
     function delete_news(WP_REST_Request $request)
     {
-        print_r($param = $request->get_param('posted_id'));
         $postId = $_POST['postId'];
         ob_start();
         $result = wp_delete_post($postId, true);
@@ -82,7 +91,7 @@ class REST_API
             'post_author'  => $user_id,
             'post_type' => 'news',
             'tax_input'    => array(
-                'hierarchical_tax'     => $newsType,
+                'newstype'     => $newsType,
             ),
             'meta_input'   => array(
                 'advanced_options_reporter-name' => $reporterName,
