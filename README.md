@@ -5,5 +5,6 @@
 * Frontend & backend pagination 
 * Custom api for CRUD operation in news
 * Add Taxonomy 
-### Note
-This is my first ever plugin. Bugs will resolve soon  
+* Custom Role Reporter
+* Reporter get their dashboard after login where he/she can check his/her posted news also able to delete news
+* Reporter Add news through form  
