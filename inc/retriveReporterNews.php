@@ -7,7 +7,6 @@ class retriveReporterNews
 
     public $reporterNews;
     public $reporter_id;
-    public $currentPage;
     public $terms;
 
     /**
@@ -20,7 +19,7 @@ class retriveReporterNews
     function __construct()
     {
         add_action("init", [$this, "getReporterNews"]);
-        add_action("init", [$this, "getReporterId"]);
+        add_action("init", [$this, "getInportantInformation"]);
         add_shortcode("Specfic_reporter_news", [$this, "showNewsInSperateFile_cb"]);
     }
 
@@ -30,7 +29,7 @@ class retriveReporterNews
      * @return NULL
      */
 
-    function getReporterId()
+    function getInportantInformation()
     {
         $this->reporter_id = get_current_user_id();
     }
@@ -43,12 +42,9 @@ class retriveReporterNews
 
     public function getReporterNews()
     {
-
-        $this->currentPage = get_query_var('paged');
         $args =  array(
-            "posts_per_page" => 5,
-            "paged" => $this->currentPage,
             'post_type' => 'news',
+            'order' => 'DESC',
             "author" => $this->reporter_id,
         );
         $this->reporterNews = new  WP_Query($args);
@@ -66,7 +62,7 @@ class retriveReporterNews
         if ($this->reporterNews->have_posts()) {
             ob_start();
             require IA_PLUGIN_DIR_ASSET . "/inc/reporterNewsShow.php";
-            require IA_PLUGIN_DIR_ASSET . "/assets/html/pagination.html";
+            // require IA_PLUGIN_DIR_ASSET . "/assets/html/pagination.html";
         } else {
             echo "<h2> Sorry you don't have any news yet! Go and add some news</h2>";
             echo "<a href='IASITE/submit-your-news/' class='button'>Add new News</a>";
