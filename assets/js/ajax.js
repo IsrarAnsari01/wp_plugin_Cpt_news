@@ -1,5 +1,8 @@
 jQuery(document).ready(($) => {
-  // Add New News
+  /**
+   * Add News Ajax
+   * Get all values from Field
+   */
   let formDiv = $("#addPostUsingRestApi");
   let submitForm = formDiv.find("form");
   submitForm.submit((e) => {
@@ -10,6 +13,7 @@ jQuery(document).ready(($) => {
     let reporterCity = submitForm.find("#reporterCity").val();
     let reporterGender = submitForm.find("#reporterGender").val();
     let newsContent = submitForm.find("#newsContent").val();
+    let pictureFile = submitForm.find("#exampleFormControlFile1")[0].files[0];
     let data = {
       newsTitle,
       newsType,
@@ -27,19 +31,33 @@ jQuery(document).ready(($) => {
       dataType: "json",
       encode: true,
       success: function (response) {
+        let formData = new FormData();
+        formData.append("newsBanner", pictureFile);
+        formData.append("newsID", response);
+        formData.append("action", "save_image");
         if (response) {
-          alert("Successfully save new News");
-        } else {
-          alert("Error in saving new News");
+          jQuery.ajax({
+            url: submit_News_obj.siteUrl + "/wp-json/news/save-thumbail-image",
+            method: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+              alert("Successfully upload new news");
+            },
+          });
         }
       },
       error: function (jqXHR, error, errorThrown) {
-        console.log("Error in finding news");
+        console.log("Something went wrong in saving news");
       },
     });
   });
 
-  // Delete News
+  /**
+   * Delete News Ajax
+   *
+   */
   $(".newsDeleteForm").on("submit", function (e) {
     e.preventDefault();
     let form = $(this);
@@ -66,7 +84,10 @@ jQuery(document).ready(($) => {
     }
   });
 
-  // For Update
+  /**
+   * Update News Ajax
+   * Get all values from Field
+   */
   let forUpdate = $("#forUpdate");
   let updateForm = forUpdate.find("form");
   updateForm.submit((e) => {

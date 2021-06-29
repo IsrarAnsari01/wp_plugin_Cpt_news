@@ -6,7 +6,7 @@ function add_post_through_rest_api()
 ?>
     <div id="addPostUsingRestApi">
         <h2>Add New News</h2>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <label for="#newsTitle"> Enter News Title Here </label>
             <input type="text" name="newsTitle" id="newsTitle" placeholder="Enter News Title here" required>
             <br> <br>

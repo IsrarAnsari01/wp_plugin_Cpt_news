@@ -2,6 +2,13 @@
 class REST_API
 {
     public $user_id;
+
+    /**
+     * Register all Routes
+     * @param NULL
+     * @return NULL
+     */
+
     function __construct()
     {
         add_action('init', [$this, "getLoggedInUser"]);
@@ -23,13 +30,29 @@ class REST_API
                 'methods' => 'POST',
                 'callback' => [$this, "update_news"],
             ));
+            register_rest_route('news', '/save-thumbail-image', array(
+                'methods' => 'POST',
+                'callback' => [$this, "save_image"],
+            ));
         });
     }
+
+    /**
+     * Get Current User ID
+     * @param NULL
+     * @return NULL
+     */
 
     function getLoggedInUser()
     {
         $this->user_id = get_current_user_id();
     }
+
+    /**
+     * Save News in wp DB
+     * @param NULL
+     * @return integer PostID
+     */
 
     function add_new_news(WP_REST_Request $request)
     {
@@ -55,13 +78,17 @@ class REST_API
                 'advanced_options_gender' => $reporterGender,
             ),
         );
-        ob_start();
         $post_id = wp_insert_post($post_arr);
         wp_set_object_terms($post_id, (int)$newsType, "newstype");
-        echo $finalResult = wp_json_encode($post_id);
-        return ob_get_clean();
+        return $post_id;
         wp_die();
     }
+
+    /**
+     * Delete News in wp DB
+     * @param NULL
+     * @return ob_get_clear
+     */
 
     function delete_news(WP_REST_Request $request)
     {
@@ -72,6 +99,14 @@ class REST_API
         return ob_get_clean();
         wp_die();
     }
+
+
+    /**
+     * Update News in wp DB
+     * @param NULL
+     * @return ob_get_clear
+     */
+
     function update_news(WP_REST_Request $request)
     {
         print_r($param = $request->get_param('dataToBeUpdated'));
@@ -106,6 +141,13 @@ class REST_API
         wp_die();
     }
 
+
+    /**
+     * Fetch all news from DB
+     * @param NULL
+     * @return ob_get_clear
+     */
+
     function get_all_news()
     {
         $currentPage = $_GET["page"];
@@ -119,6 +161,41 @@ class REST_API
         ob_start();
         $customQuery = new  WP_Query($args);
         echo $getPostsFromDB = wp_json_encode($customQuery);
+        return ob_get_clean();
+        wp_die();
+    }
+
+
+    /**
+     * Save Post image in wp DB
+     * @param NULL
+     * @return ob_get_clear
+     */
+
+    function save_image()
+    {
+        $wordpress_dir = wp_upload_dir();
+        $imageFile = $_FILES["newsBanner"];
+        $imageName = $_FILES["newsBanner"]["name"];
+        $parent_post_id = $_POST["newsID"];
+        $new_file_path = $wordpress_dir['path'] . '/' . $imageName;
+        $new_file_mime = mime_content_type($imageFile['tmp_name']);
+        if (empty($imageFile)) die('File is not selected.');
+        if ($imageFile['error']) die($imageFile['error']);
+        if ($imageFile['size'] > wp_max_upload_size()) die('It is too large than expected.');
+        if (!in_array($new_file_mime, get_allowed_mime_types())) die('WordPress doesn\'t allow this type of uploads.');
+        $attachment = array(
+            'guid'           => $new_file_path,
+            'post_mime_type' => $new_file_mime,
+            'post_title'     => preg_replace('/\.[^.]+$/', '', $imageName),
+            'post_status'    => 'publish'
+        );
+        ob_start();
+        $attach_id = wp_insert_attachment($attachment, $new_file_path, $parent_post_id);
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+        $attach_data = wp_generate_attachment_metadata($attach_id, $new_file_path);
+        wp_update_attachment_metadata($attach_id, $attach_data);
+        set_post_thumbnail($parent_post_id, $attach_id);
         return ob_get_clean();
         wp_die();
     }

@@ -13,7 +13,7 @@ while ($customQuery->have_posts()) {
                 Reporter Name : <?php echo $Reporter_Name;  ?> <br> Reported City <?php echo $Reported_City; ?>
             </p>
             <p>News Type: <b> <?php $terms = get_the_terms($postId, 'newstype');
-                               if ($terms) {
+                                if ($terms) {
                                     foreach ($terms as $term) {
                                         echo $term->name, "<br>";
                                     }
