@@ -7,4 +7,4 @@
 * Add Taxonomy 
 * Custom Role Reporter
 * Reporter get their dashboard after login where he/she can check his/her posted news also able to delete news
-* Reporter Add news through form  
+* Reporter Add news through add news form  
