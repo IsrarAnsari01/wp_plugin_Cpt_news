@@ -45,7 +45,6 @@ function create_custom_post_type()
         'has_archive' => true,
         'hierarchical' => false,
         'menu_position' => 2,
-        'menu_icon' => 'dashicons-format-aside',
     );
 
     register_post_type('news', $args);
